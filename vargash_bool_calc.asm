@@ -4,7 +4,6 @@
 ; @Last Modified by:   vargash1
 ; @Last Modified time: 2014-12-18 12:53:34
 ; @Name:   Vargas, Hector
-;http://www.twitch.tv/trick2g
 INCLUDE     Irvine32.inc
     Menu    STRUCT
         out_1       BYTE    "Enter the number for operation",0Dh,0Ah
