@@ -10,7 +10,7 @@ INCLUDE     Irvine32.inc
         out_1       BYTE    "Enter the number for operation",0Dh,0Ah
                     BYTE    "(1) x AND y",0Dh,0Ah
                     BYTE    "(2) x OR y",0Dh,0Ah
-                    BYTE    "(3) x XOR y",0Dh,0Ah
+                    BYTE    "(3)  x XOR y",0Dh,0Ah
                     BYTE    "(4) NOT X",0Dh,0Ah
                     BYTE    "(5) NOT Y",0Dh,0Ah
                     BYTE    "(6) Enter new X and Y",0Dh,0Ah,
@@ -297,8 +297,15 @@ set_text_color_green    PROC uses eax
     call    SetTextColor
     ret
 set_text_color_green    ENDP 
-write_banner    PROC
-    
+write_banner    PROC uses edx eax
+    mov     eax, white + (cyan * 16)
+    call    SetTextColor 
+    mov     edx, OFFSET new_menu.banner
+    call    WriteString
+    call    crlf
+    call    WaitMsg
+    call    Clrscr
+    call    set_text_color_def
     ret
 write_banner    ENDP
 end     main
