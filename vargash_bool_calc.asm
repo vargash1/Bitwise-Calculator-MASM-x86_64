@@ -270,7 +270,9 @@ not_op_y        ENDP
 shr_op_x        PROC
     mov         eax,shift_by
     mov         ebx,[x]
-    shr         
+    shr         ebx,eax
+    ;TODO  finish up this procedure
+    ret
 shr_op_x        ENDP 
 write_radix     PROC
     ;write in plain old Decimal
