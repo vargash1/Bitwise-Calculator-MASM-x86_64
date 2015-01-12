@@ -4,22 +4,29 @@
 ; @Last Modified by:   vargash1
 ; @Last Modified time: 2014-12-18 12:53:34
 ; @Name:   Vargas, Hector
+;TODO add shr ,shl, ror, rol to user option
 INCLUDE     Irvine32.inc
     Menu    STRUCT
         out_1       BYTE    "Enter the number for operation",0Dh,0Ah
-                    BYTE    "(1) x AND y",0Dh,0Ah
-                    BYTE    "(2) x OR y",0Dh,0Ah
-                    BYTE    "(3)  x XOR y",0Dh,0Ah
+                    BYTE    "(1) X AND Y",0Dh,0Ah
+                    BYTE    "(2) X OR  Y",0Dh,0Ah
+                    BYTE    "(3) X XOR Y",0Dh,0Ah
                     BYTE    "(4) NOT X",0Dh,0Ah
                     BYTE    "(5) NOT Y",0Dh,0Ah
-                    BYTE    "(6) Enter new X and Y",0Dh,0Ah,
-                            "(7) Quit",0Dh,0Ah,0
-        banner      BYTE    "           ______                           )   _____",0Dh,0Ah
-                    BYTE    "  (, /    )       /)               (__/_____)     /)        /)",0Dh,0Ah   
-                    BYTE    "    /---(  ______//  _  _  __        /       _   // _      // _  _/_ _____",0Dh,0Ah
+                    BYTE    "(6) SHIFT RIGHT",0Dh,0Ah
+                    BYTE    "(7) SHIFT LEFT",0Dh,0Ah
+                    BYTE    "(8) ROTATE RIGHT",0Dh,0Ah
+                    BYTE    "(9) ROTATE LEFT",0Dh,0Ah
+                    BYTE    "(N) Enter new X and Y",0Dh,0Ah
+                            "(Q) Quit",0Dh,0Ah,0
+        banner      BYTE    "           ______                           )   _____                      ",0Dh,0Ah
+                    BYTE    "  (, /    )       /)               (__/_____)     /)        /)             ",0Dh,0Ah   
+                    BYTE    "    /---(  ______//  _  _  __        /       _   // _      // _  _/_ _____ ",0Dh,0Ah
                     BYTE    " ) / ____)(_)(_)(/__(/_(_(_/ (_     /       (_(_(/_(__(_(_(/_(_(_(__(_)/ (_",0Dh,0Ah
-                    BYTE    "(_/ (                              (______)",0Dh,0Ah,0 
+                    BYTE    "(_/ (                              (______)                                ",0Dh,0Ah,0 
         user_in     DWORD   ?
+        shift_by    DWORD   ?
+        rotate_by   DWORD   ?
         bin_out     BYTE    "   Binary:            ",0
         hex_out     BYTE    "   Hexadecimal:       ",0
         dec_out     BYTE    "   Decimal:           ",0   
@@ -51,19 +58,19 @@ l1:
 main    ENDP
 ;determines where to go
 go_to_menu_choice   PROC
-    cmp     new_menu.user_in,1
+    cmp     new_menu.user_in,'1'
     je      menu_1
-    cmp     new_menu.user_in,2
+    cmp     new_menu.user_in,'2'
     je      menu_2
-    cmp     new_menu.user_in,3
+    cmp     new_menu.user_in,'3'
     je      menu_3
-    cmp     new_menu.user_in,4
+    cmp     new_menu.user_in,'4'
     je      menu_4
-    cmp     new_menu.user_in,5
+    cmp     new_menu.user_in,'5'
     je      menu_5
-    cmp     new_menu.user_in,6
+    cmp     new_menu.user_in,'6'
     je      menu_6
-    cmp     new_menu.user_in,7
+    cmp     new_menu.user_in,'7'
     je      menu_7
     ret
 menu_1:
@@ -92,12 +99,12 @@ go_to_menu_choice   ENDP
 valid_menu_choice   PROC
     mov     edx,OFFSET new_menu.out_1
     call    WriteString
-    call    ReadInt
-    cmp     eax,0
+    call    ReadChar
+    cmp     al,'0'
     jl      invalid_choice
-    cmp     eax,6
+    cmp     al,'7'
     jg      invalid_choice
-    mov     [new_menu.user_in],eax
+    mov     [new_menu.user_in],al
     ret
 invalid_choice:
     call    valid_menu_choice
@@ -259,6 +266,12 @@ not_op_y        PROC
     call    crlf
     ret
 not_op_y        ENDP
+;shift x right by read in value
+shr_op_x        PROC
+    mov         eax,shift_by
+    mov         ebx,[x]
+    shr         
+shr_op_x        ENDP 
 write_radix     PROC
     ;write in plain old Decimal
     call    set_text_color_cyan
@@ -304,9 +317,9 @@ write_banner    PROC uses edx eax
     mov     edx, OFFSET new_menu.banner
     call    WriteString
     call    crlf
+    call    set_text_color_def
     call    WaitMsg
     call    Clrscr
-    call    set_text_color_def
     ret
 write_banner    ENDP
 end     main
