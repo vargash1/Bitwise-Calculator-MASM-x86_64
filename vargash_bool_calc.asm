@@ -37,7 +37,9 @@ INCLUDE     Irvine32.inc
     new_menu        Menu<>
 .code
 main    PROC    
+    call    write_banner
     call    read_in_val
+
     mov     ecx,1000
 l1:
     call    valid_menu_choice
